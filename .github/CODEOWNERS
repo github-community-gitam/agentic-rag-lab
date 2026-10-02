@@ -1,0 +1,4 @@
+# TODO: Replace @ORG placeholders with the actual organization or team slug when available.
+* @ORG/rag-eval-maintainers
+/tests/ @ORG/rag-eval-maintainers
+/.github/ @ORG/release-maintainers
