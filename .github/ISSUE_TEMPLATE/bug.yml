@@ -1,0 +1,19 @@
+name: Bug report
+about: Report a bug in the workshop lab
+title: ""
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: What happened and what was expected?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction steps
+      description: Include minimal commands or code to reproduce the issue.
+  - type: textarea
+    attributes:
+      label: Environment
+      description: Include Python version, OS, and relevant setup notes.
