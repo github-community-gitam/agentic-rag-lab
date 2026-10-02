@@ -33,13 +33,20 @@ def main() -> None:
         chunks=chunks,
     )
 
-    query = "MCP tools and retrieval basics"
-    results = retriever.retrieve(query, top_k=3)
-    print(f"Query: {query}")
-    print("Results:")
-    for index, result in enumerate(results, start=1):
-        print(f"  {index}. {result.source} (score={result.score:.4f})")
-        print(f"     {result.text[:120]}...")
+    queries = [
+        "What is retrieval augmented generation?",
+        "What does an MCP tool do?",
+        "How does a vector store rank relevant chunks?",
+    ]
+
+    for query in queries:
+        results = retriever.retrieve(query, top_k=3)
+        print(f"Query: {query}")
+        print("Results:")
+        for index, result in enumerate(results, start=1):
+            print(f"  {index}. {result.source} (score={result.score:.4f})")
+            print(f"     {result.text[:120]}...")
+        print()
 
 
 if __name__ == "__main__":

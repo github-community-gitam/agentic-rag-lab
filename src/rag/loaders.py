@@ -37,13 +37,15 @@ def load_documents(directory: str | Path) -> list[Document]:
             continue
 
         content = file_path.read_text(encoding="utf-8")
+        relative_source = file_path.relative_to(path).as_posix()
         documents.append(
             Document(
                 document_id=file_path.stem,
                 text=content,
                 metadata={
-                    "source": str(file_path),
+                    "source": relative_source,
                     "filename": file_path.name,
+                    "document_type": suffix,
                 },
             )
         )

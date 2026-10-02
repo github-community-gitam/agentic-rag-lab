@@ -1,3 +1,0 @@
-Retrieval-augmented generation combines a knowledge corpus with a retriever. A document loader reads source files. A chunker splits them into smaller segments. An embedding model converts each chunk into a vector representation.
-
-A vector store indexes those embeddings so a query can be compared against the corpus. Top-k retrieval selects the most relevant chunks. The result is then used as context for a downstream model or workflow.
