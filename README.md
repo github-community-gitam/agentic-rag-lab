@@ -76,6 +76,25 @@ python examples/rag_demo.py
 
 This repository is offline-first and intentionally uses deterministic mock embeddings rather than paid external embedding providers. The examples and tests are designed to run entirely on local fixtures. No secret, credential, or hosted service is required for standard execution.
 
+## Workshop Corpus
+
+The fixture corpus is intentionally built as a compact but realistic RAG workshop. Instead of three tiny text files, the project now includes six original Markdown documents that cover the main concepts of retrieval:
+
+- a project overview and RAG fundamentals
+- document loading and indexing
+- chunking and segmentation
+- embeddings and vector search
+- MCP tool contracts and structured tool discovery
+- evaluation and end-to-end retrieval workflows
+
+These documents are designed to support questions such as:
+
+- "What is retrieval augmented generation?"
+- "How does a retriever choose the best chunks?"
+- "What does an MCP tool do?"
+
+The loader supports both `.txt` and `.md` files and preserves deterministic ordering, while the workshop corpus emphasizes the Markdown workflow that is common in documentation-heavy RAG use cases.
+
 ## Architecture Explanation
 
 ### Documents
