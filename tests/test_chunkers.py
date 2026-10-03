@@ -73,3 +73,13 @@ def test_chunk_document_deterministic_repeated_execution(sample_document: Docume
     second = chunk_document(sample_document, chunk_size=10, overlap=2)
 
     assert [chunk.text for chunk in first] == [chunk.text for chunk in second]
+
+def test_chunk_document_whitespace_only_text() -> None:
+    document = Document(
+        document_id="doc-whitespace",
+        text="   \n\n   ",
+        metadata={"source": "fixture", "filename": "whitespace.txt"},
+    )
+
+    assert chunk_document(document, chunk_size=10, overlap=2) == []
+    
