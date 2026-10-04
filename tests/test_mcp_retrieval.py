@@ -104,3 +104,23 @@ def test_execute_retrieval_tool() -> None:
     response = execute_retrieval_tool({"query": "test"}, retriever=None)
     assert isinstance(response, dict)
     assert "results" in response
+
+def test_mcp_tool_rejects_invalid_top_k_type(
+    retrieval_fixture: tuple[list[Chunk], FaissVectorStore],
+) -> None:
+    _, store = retrieval_fixture
+
+    tool = build_mcp_tool(
+        store,
+        [
+            Chunk(
+                chunk_id="c1",
+                text="one",
+                document_id="d1",
+                metadata={"source": "one.txt", "filename": "one.txt"},
+            ),
+        ],
+    )
+
+    with pytest.raises(TypeError):
+        tool["handler"]({"query": "one", "top_k": "2"})
