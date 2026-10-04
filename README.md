@@ -171,3 +171,12 @@ agentic-rag-lab/
 ├── requirements.txt
 └── .github/workflows/ci.yml
 ```
+## License
+
+This project is released under the [MIT License](LICENSE).
+
+
+## Contributors
+
+- [Pavan Kumar](https://github.com/CherukuriPavanKumar)
+- [Manasa Maddu](https://github.com/manasakeerthika)
