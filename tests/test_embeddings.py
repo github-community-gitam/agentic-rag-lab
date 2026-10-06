@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from rag.embeddings import MockEmbeddingProvider
 
@@ -40,3 +41,6 @@ def test_mock_embedding_provider_matches_numpy_float32_shape() -> None:
     array = np.asarray(embedding, dtype=np.float32)
 
     assert array.shape == (8,)
+def test_mock_embedding_provider_rejects_dimension_above_hash_capacity() -> None:
+    with pytest.raises(ValueError):
+        MockEmbeddingProvider(dimension=9)
