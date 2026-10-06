@@ -71,3 +71,16 @@ def test_faiss_vector_store_save_and_load_round_trip(chunks: list[Chunk], sample
 
     assert restored.search(sample_embeddings[0], top_k=1)[0]["chunk_id"] == store.search(sample_embeddings[0], top_k=1)[0]["chunk_id"]
     assert restored.index.ntotal == 3
+def test_faiss_vector_store_rejects_non_finite_embeddings(
+    chunks: list[Chunk],
+) -> None:
+    store = FaissVectorStore()
+
+    embeddings = [
+        [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, float("nan")],
+        [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+        [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    ]
+
+    with pytest.raises(ValueError):
+        store.add(chunks, embeddings)
