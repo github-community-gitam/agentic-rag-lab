@@ -62,3 +62,15 @@ def test_workshop_corpus_is_a_markdown_collection() -> None:
     assert len(documents) == 6
     assert all(doc.filename.endswith(".md") for doc in documents)
     assert all(doc.metadata["source"].endswith(".md") for doc in documents)
+def test_load_documents_have_unique_document_ids(tmp_path: Path) -> None:
+    doc_dir = tmp_path / "documents"
+    doc_dir.mkdir()
+
+    (doc_dir / "report.txt").write_text("Text report\n", encoding="utf-8")
+    (doc_dir / "report.md").write_text("# Markdown report\n", encoding="utf-8")
+
+    documents = load_documents(doc_dir)
+
+    document_ids = [doc.document_id for doc in documents]
+
+    assert len(document_ids) == len(set(document_ids))
