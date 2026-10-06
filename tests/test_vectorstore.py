@@ -71,3 +71,21 @@ def test_faiss_vector_store_save_and_load_round_trip(chunks: list[Chunk], sample
 
     assert restored.search(sample_embeddings[0], top_k=1)[0]["chunk_id"] == store.search(sample_embeddings[0], top_k=1)[0]["chunk_id"]
     assert restored.index.ntotal == 3
+def test_faiss_vector_store_rejects_incomplete_metadata(
+    chunks: list[Chunk],
+    sample_embeddings: list[list[float]],
+    tmp_path: Path,
+) -> None:
+    store = FaissVectorStore()
+    store.add(chunks, sample_embeddings)
+
+    path = tmp_path / "retrieval.index"
+    store.save(path)
+
+    meta_path = path.with_suffix(path.suffix + ".meta.json")
+    meta_path.write_text('{"chunks": []}', encoding="utf-8")
+
+    restored = FaissVectorStore()
+
+    with pytest.raises(ValueError):
+        restored.load(path)
