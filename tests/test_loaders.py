@@ -62,3 +62,17 @@ def test_workshop_corpus_is_a_markdown_collection() -> None:
     assert len(documents) == 6
     assert all(doc.filename.endswith(".md") for doc in documents)
     assert all(doc.metadata["source"].endswith(".md") for doc in documents)
+def test_load_documents_includes_supported_files_in_subdirectories(tmp_path: Path) -> None:
+    doc_dir = tmp_path / "documents"
+    nested_dir = doc_dir / "nested"
+    nested_dir.mkdir(parents=True)
+
+    (doc_dir / "root.txt").write_text("root document\n", encoding="utf-8")
+    (nested_dir / "nested.txt").write_text("nested document\n", encoding="utf-8")
+
+    documents = load_documents(doc_dir)
+
+    assert [doc.source for doc in documents] == [
+        "nested/nested.txt",
+        "root.txt",
+    ]
