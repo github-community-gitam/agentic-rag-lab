@@ -62,3 +62,13 @@ def test_workshop_corpus_is_a_markdown_collection() -> None:
     assert len(documents) == 6
     assert all(doc.filename.endswith(".md") for doc in documents)
     assert all(doc.metadata["source"].endswith(".md") for doc in documents)
+def test_load_documents_skips_empty_files(tmp_path: Path) -> None:
+    doc_dir = tmp_path / "documents"
+    doc_dir.mkdir()
+
+    (doc_dir / "empty.txt").write_text("", encoding="utf-8")
+    (doc_dir / "valid.txt").write_text("This is valid content.\n", encoding="utf-8")
+
+    documents = load_documents(doc_dir)
+
+    assert [doc.filename for doc in documents] == ["valid.txt"]
