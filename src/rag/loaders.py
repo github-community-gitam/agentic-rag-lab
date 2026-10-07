@@ -32,7 +32,7 @@ def load_documents(directory: str | Path) -> list[Document]:
     for file_path in sorted(path.iterdir(), key=lambda item: item.name):
         if not file_path.is_file():
             continue
-        suffix = file_path.suffix.lower().lstrip(".")
+        suffix = file_path.suffix.lstrip(".")
         if suffix not in SUPPORTED_TEXT_EXTENSIONS:
             continue
 

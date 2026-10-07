@@ -62,3 +62,13 @@ def test_workshop_corpus_is_a_markdown_collection() -> None:
     assert len(documents) == 6
     assert all(doc.filename.endswith(".md") for doc in documents)
     assert all(doc.metadata["source"].endswith(".md") for doc in documents)
+def test_load_documents_supports_uppercase_extensions(tmp_path: Path) -> None:
+    doc_dir = tmp_path / "uppercase"
+    doc_dir.mkdir()
+
+    (doc_dir / "notes.TXT").write_text("uppercase text\n", encoding="utf-8")
+    (doc_dir / "guide.MD").write_text("# Guide\n", encoding="utf-8")
+
+    documents = load_documents(doc_dir)
+
+    assert [doc.filename for doc in documents] == ["guide.MD", "notes.TXT"]
