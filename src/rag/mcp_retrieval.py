@@ -19,7 +19,10 @@ def build_mcp_tool(
         if not isinstance(payload, dict):
             raise TypeError("payload must be a dictionary")
 
-        query = str(payload.get("query", "")).strip()
+        query = payload.get("query")
+        if not isinstance(query, str):
+            raise TypeError("query must be a string")
+        query = query.strip()
         if not query:
             raise ValueError("query must be a non-empty string")
 
@@ -68,7 +71,10 @@ def execute_retrieval_tool(payload: dict[str, Any], retriever: Retriever | None 
             chunks=[],
         )
 
-    query = str(payload.get("query", "")).strip()
+    query = payload.get("query")
+    if not isinstance(query, str):
+        raise TypeError("query must be a string")
+    query = query.strip()
     if not query:
         raise ValueError("query must be a non-empty string")
 
