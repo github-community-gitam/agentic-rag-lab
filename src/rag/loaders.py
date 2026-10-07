@@ -36,7 +36,10 @@ def load_documents(directory: str | Path) -> list[Document]:
         if suffix not in SUPPORTED_TEXT_EXTENSIONS:
             continue
 
-        content = file_path.read_text(encoding="utf-8")
+        try:
+            content = file_path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
         relative_source = file_path.relative_to(path).as_posix()
         documents.append(
             Document(

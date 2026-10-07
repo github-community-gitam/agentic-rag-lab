@@ -62,3 +62,31 @@ def test_workshop_corpus_is_a_markdown_collection() -> None:
     assert len(documents) == 6
     assert all(doc.filename.endswith(".md") for doc in documents)
     assert all(doc.metadata["source"].endswith(".md") for doc in documents)
+
+
+def test_load_documents_skips_invalid_utf8_files(tmp_path: Path) -> None:
+    doc_dir = tmp_path / "invalid_utf8"
+    doc_dir.mkdir()
+    (doc_dir / "valid.txt").write_text("valid utf-8 content\n", encoding="utf-8")
+    (doc_dir / "invalid.txt").write_bytes(b"\xff\xfe invalid utf-8 \x80")
+
+    documents = load_documents(doc_dir)
+
+    filenames = [doc.filename for doc in documents]
+    assert "invalid.txt" not in filenames
+    assert filenames == ["valid.txt"]
+    assert documents[0].text == "valid utf-8 content\n"
+
+
+def test_load_documents_continues_after_invalid_utf8_file(tmp_path: Path) -> None:
+    doc_dir = tmp_path / "continues_after_invalid"
+    doc_dir.mkdir()
+    (doc_dir / "01_first.txt").write_text("first valid document\n", encoding="utf-8")
+    (doc_dir / "02_corrupt.txt").write_bytes(b"\x80\xff corrupt bytes")
+    (doc_dir / "03_second.txt").write_text("second valid document\n", encoding="utf-8")
+
+    documents = load_documents(doc_dir)
+
+    assert [doc.filename for doc in documents] == ["01_first.txt", "03_second.txt"]
+    assert [doc.text for doc in documents] == ["first valid document\n", "second valid document\n"]
+
