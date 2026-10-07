@@ -29,9 +29,8 @@ def load_documents(directory: str | Path) -> list[Document]:
         raise FileNotFoundError(f"Document directory not found: {path}")
 
     documents: list[Document] = []
-    for file_path in sorted(path.iterdir(), key=lambda item: item.name):
-        if not file_path.is_file():
-            continue
+    files = [file_path for file_path in path.rglob("*") if file_path.is_file()]
+    for file_path in sorted(files, key=lambda item: item.relative_to(path).as_posix()):
         suffix = file_path.suffix.lower().lstrip(".")
         if suffix not in SUPPORTED_TEXT_EXTENSIONS:
             continue
