@@ -25,7 +25,7 @@ def chunk_document(document: Document, chunk_size: int, overlap: int) -> list[Ch
     if overlap >= chunk_size:
         raise ValueError("overlap must be smaller than chunk_size")
 
-    if not document.text:
+    if not document.text.strip():
         return []
 
     if len(document.text) <= chunk_size:
