@@ -73,3 +73,9 @@ def test_chunk_document_deterministic_repeated_execution(sample_document: Docume
     second = chunk_document(sample_document, chunk_size=10, overlap=2)
 
     assert [chunk.text for chunk in first] == [chunk.text for chunk in second]
+def test_chunk_document_rejects_boolean_parameters(sample_document: Document) -> None:
+    with pytest.raises(TypeError):
+        chunk_document(sample_document, chunk_size=True, overlap=0)
+
+    with pytest.raises(TypeError):
+        chunk_document(sample_document, chunk_size=10, overlap=False)
