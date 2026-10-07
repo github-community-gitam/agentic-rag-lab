@@ -104,3 +104,53 @@ def test_execute_retrieval_tool() -> None:
     response = execute_retrieval_tool({"query": "test"}, retriever=None)
     assert isinstance(response, dict)
     assert "results" in response
+
+
+def test_mcp_tool_rejects_integer_query(retrieval_fixture: tuple[list[Chunk], FaissVectorStore]) -> None:
+    _, store = retrieval_fixture
+    tool = build_mcp_tool(store, [
+        Chunk(chunk_id="c1", text="one", document_id="d1", metadata={"source": "one.txt", "filename": "one.txt"}),
+    ])
+
+    with pytest.raises(TypeError, match="query must be a string"):
+        tool["handler"]({"query": 123})
+
+
+@pytest.mark.parametrize("bool_val", [True, False])
+def test_mcp_tool_rejects_boolean_query(retrieval_fixture: tuple[list[Chunk], FaissVectorStore], bool_val: bool) -> None:
+    _, store = retrieval_fixture
+    tool = build_mcp_tool(store, [
+        Chunk(chunk_id="c1", text="one", document_id="d1", metadata={"source": "one.txt", "filename": "one.txt"}),
+    ])
+
+    with pytest.raises(TypeError, match="query must be a string"):
+        tool["handler"]({"query": bool_val})
+
+
+def test_mcp_tool_rejects_null_query(retrieval_fixture: tuple[list[Chunk], FaissVectorStore]) -> None:
+    _, store = retrieval_fixture
+    tool = build_mcp_tool(store, [
+        Chunk(chunk_id="c1", text="one", document_id="d1", metadata={"source": "one.txt", "filename": "one.txt"}),
+    ])
+
+    with pytest.raises(TypeError, match="query must be a string"):
+        tool["handler"]({"query": None})
+
+
+def test_mcp_tool_rejects_list_query(retrieval_fixture: tuple[list[Chunk], FaissVectorStore]) -> None:
+    _, store = retrieval_fixture
+    tool = build_mcp_tool(store, [
+        Chunk(chunk_id="c1", text="one", document_id="d1", metadata={"source": "one.txt", "filename": "one.txt"}),
+    ])
+
+    with pytest.raises(TypeError, match="query must be a string"):
+        tool["handler"]({"query": ["rag"]})
+
+
+def test_execute_retrieval_tool_rejects_non_string_query() -> None:
+    with pytest.raises(TypeError, match="query must be a string"):
+        execute_retrieval_tool({"query": 123})
+
+    with pytest.raises(TypeError, match="query must be a string"):
+        execute_retrieval_tool({"query": None})
+
