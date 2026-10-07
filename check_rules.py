@@ -205,7 +205,7 @@ def check_pull_request(base: str) -> None:
     files = [f for f in git("diff", "--name-only", "--diff-filter=ACMR",
                             f"{base}...HEAD").splitlines() if f]
     code = [f for f in files if f.endswith(".py")
-            and (f.startswith("src/") or f.startswith("mocks/"))]
+            and f.startswith(("src/", "mocks/"))]
     tests = [f for f in files if f.startswith("tests/")]
     print(f"Changed files: {len(files)}  (code: {len(code)}, tests: {len(tests)})")
 
