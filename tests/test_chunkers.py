@@ -20,6 +20,25 @@ def test_chunk_document_empty_text() -> None:
 
     assert chunk_document(document, chunk_size=10, overlap=2) == []
 
+def test_chunk_document_whitespace_only_text() -> None:
+    document = Document(
+        document_id="doc-whitespace",
+        text="   ",
+        metadata={"source": "fixture", "filename": "whitespace.txt"},
+    )
+
+    assert chunk_document(document, chunk_size=10, overlap=2) == []
+
+
+def test_chunk_document_newline_only_text() -> None:
+    document = Document(
+        document_id="doc-newlines",
+        text="\n\n",
+        metadata={"source": "fixture", "filename": "newlines.txt"},
+    )
+
+    assert chunk_document(document, chunk_size=10, overlap=2) == []
+
 
 def test_chunk_document_shorter_than_chunk_size(sample_document: Document) -> None:
     chunks = chunk_document(sample_document, chunk_size=20, overlap=2)
